@@ -10,14 +10,17 @@ namespace Pomelo
         void OnEnable ()
         {
             GCommandManager ctrl = GCommandManager.create ();
-#if true
+#if false
             ctrl.add (new GLoadBundleCommand ("C:/xampp/htdocs/android/0.0.0.1/assetbundle/assets/resources/texture/items/item_03_003_0013.png"));
             ctrl.add (new GLoadBundleAssetCommand (GResID.TEXTURE2D, "assets/resources/texture/items/item_03_003_0013.png"));
             ctrl.add (new GUnloadCommand (GResID.ASSETBUNDLE));
 #else
-            ctrl.add (new GLoadAssetCommand (GResID.TEXTURE2D, "Texture/item_04_043"));
+            for (int i = 0; i < 10; i++) {
+                
+                ctrl.add (new GLoadAssetCommand (GResID.TEXTURE2D, "Texture/item_01_" + (i + 1).ToString ("D3")));
+                ctrl.add (new GGenImageCommand (m_itemParent));
+            }
 #endif
-            ctrl.add (new GGenImageCommand (m_itemParent));
             ctrl.execute ();
         }
 
