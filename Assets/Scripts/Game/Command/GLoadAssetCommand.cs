@@ -6,15 +6,19 @@ namespace Pomelo
 
     public class GLoadAssetCommand : GCommand
     {
+
+        private int m_resId;
+
         private string m_resPath;
 
         private ResourceRequest m_request;
 
 #region GCommand implementation
 
-        public GLoadAssetCommand (string resName)
+        public GLoadAssetCommand (int resId, string resPath)
         {
-            m_resPath = resName;
+            m_resId = resId;
+            m_resPath = resPath;
             m_request = null;
         }
 
@@ -29,6 +33,7 @@ namespace Pomelo
 
         public override void exit ()
         {
+            m_cmdMgr.setData (m_resId, m_request.asset);
         }
 
         public override bool isDone ()

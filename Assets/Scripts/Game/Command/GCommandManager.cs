@@ -4,15 +4,21 @@ using System.Collections.Generic;
 
 namespace Pomelo
 {
+    public class GResID
+    {
+        public const int ASSETBUNDLE = 1;
+        public const int TEXTURE2D = 2;
+    }
+
     public class GCommandManager : MonoBehaviour
     {
         private Queue<GCommand> m_CommandQueue;
 
         private bool m_isRunning;
 
-        private bool m_isDone;
-
         private GCommand m_currentCommand;
+
+        private Dictionary<int, System.Object> m_currentData;
 
         public static GCommandManager create ()
         {
@@ -25,8 +31,8 @@ namespace Pomelo
         {
             m_CommandQueue = new Queue<GCommand> ();
             m_isRunning = false;
-            m_isDone = false;
             m_currentCommand = null;
+            m_currentData = new Dictionary<int, object> ();
         }
 
         void Update ()
@@ -37,9 +43,9 @@ namespace Pomelo
             if (m_currentCommand == null) {
                 if (m_CommandQueue.Count == 0) {
                     m_isRunning = false;
-                    m_isDone = true;
                 } else {
                     m_currentCommand = m_CommandQueue.Dequeue ();
+                    m_currentCommand.init (this);
                     m_currentCommand.enter ();
                 }
                 return;
@@ -59,10 +65,21 @@ namespace Pomelo
             m_CommandQueue.Enqueue (Command);
         }
 
+        public void setData (int resId, System.Object res)
+        {
+            m_currentData [resId] = res;
+        }
+
+        public System.Object getData (int resId)
+        {
+            System.Object obj = null;
+            m_currentData.TryGetValue (resId, out obj);
+            return obj;
+        }
+
         public void execute ()
         {
             m_isRunning = true;
-            m_isDone = false;
         }
     }
 }
