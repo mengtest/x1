@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace Pomelo
+namespace berry
 {
 
     public class GLoadBundleAssetCommand : GCommand
@@ -12,8 +12,6 @@ namespace Pomelo
 
         private AssetBundleRequest m_request;
 
-#region GCommand implementation
-
         public GLoadBundleAssetCommand (int resId, string resPath)
         {
             m_resId = resId;
@@ -23,17 +21,17 @@ namespace Pomelo
 
         public override void enter ()
         {
-            AssetBundle bundle = m_cmdMgr.getData (GResID.ASSETBUNDLE) as AssetBundle;
-            m_request = bundle.LoadAssetAsync (m_resPath.ToLower ());
-        }
-
-        public override void process ()
-        {
+            AssetBundle bundle = FResManager.getInstance ().getRes (FResID.ASSETBUNDLE) as AssetBundle;
+            m_request = bundle.LoadAssetAsync (m_resPath.ToLower ()); // AssetBundle中所有资源名称和路径都是小写
         }
 
         public override void exit ()
         {
-            m_cmdMgr.setData (m_resId, m_request.asset);
+            FResManager.getInstance ().setRes (m_resId, m_request.asset);
+        }
+
+        public override void process ()
+        {
         }
 
         public override bool isDone ()
@@ -43,8 +41,6 @@ namespace Pomelo
             
             return m_request.isDone;
         }
-
-#endregion
     }
 
 }

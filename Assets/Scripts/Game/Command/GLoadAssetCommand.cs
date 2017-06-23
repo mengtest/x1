@@ -1,19 +1,16 @@
 using UnityEngine;
 using System.Collections;
 
-namespace Pomelo
+namespace berry
 {
 
     public class GLoadAssetCommand : GCommand
     {
-
         private int m_resId;
 
         private string m_resPath;
 
         private ResourceRequest m_request;
-
-#region GCommand implementation
 
         public GLoadAssetCommand (int resId, string resPath)
         {
@@ -24,30 +21,35 @@ namespace Pomelo
 
         public override void enter ()
         {
-            m_request = Resources.LoadAsync (m_resPath);
+            System.Type resType = typeof (UnityEngine.Object);
+            if (m_resId == FResID.ASSETBUNDLE) {
+            } else if (m_resId == FResID.PREFAB) {
+                
+            } else if (m_resId == FResID.TEXTURE) {
+                resType = typeof (Texture);
+            } else if (m_resId == FResID.SPRITE) {
+                resType = typeof (Sprite);
+            } else if (m_resId == FResID.FONT) {
+            } else if (m_resId == FResID.AUDIO) {
+            } else if (m_resId == FResID.FX) {
+            }
+
+            m_request = Resources.LoadAsync (m_resPath, resType);
+        }
+
+        public override void exit ()
+        {
+            FResManager.getInstance ().setRes (m_resId, m_request.asset);
         }
 
         public override void process ()
         {
         }
 
-        public override void exit ()
-        {
-            m_cmdMgr.setData (m_resId, m_request.asset);
-        }
-
         public override bool isDone ()
         {
             return m_request.isDone;
         }
-
-#endregion
-
-        public UnityEngine.Object getAsset ()
-        {
-            return m_request.asset;
-        }
-        
     }
 
 }

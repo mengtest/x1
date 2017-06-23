@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-namespace Pomelo
+namespace berry
 {
 
     public class GGenImageCommand : GCommand
@@ -13,8 +13,6 @@ namespace Pomelo
         {
             m_parent = parent;
         }
-
-#region GCommand implementation
 
         public override void enter ()
         {
@@ -33,8 +31,12 @@ namespace Pomelo
             go.transform.localScale = Vector3.one;
 
             Image imgCtrl = go.AddComponent<Image> ();
-            Texture2D tex = m_cmdMgr.getData (GResID.TEXTURE2D) as Texture2D;
+#if false
+            Texture2D tex = FResManager.getInstance ().getRes (FResID.TEXTURE) as Texture2D;
             imgCtrl.sprite = Sprite.Create (tex, new Rect (0, 0, tex.width, tex.height), new Vector2 (0.5f, 0.5f));
+#else
+            imgCtrl.sprite = FResManager.getInstance ().getRes (FResID.SPRITE) as Sprite;
+#endif
             imgCtrl.SetNativeSize ();
         }
 
@@ -42,7 +44,5 @@ namespace Pomelo
         {
             return true;
         }
-
-#endregion
     }
 }

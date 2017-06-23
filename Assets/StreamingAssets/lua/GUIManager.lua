@@ -7,7 +7,7 @@ local m_canvas = nil;
 
 function GUIManager.init()
     m_guilist = {};
-    m_canvas = LuaHelper.GetCanvas();
+    m_canvas = LuaHelper.getCanvas();
 end
 
 function GUIManager.pushUI(uiName, isDialog)
@@ -16,8 +16,8 @@ function GUIManager.pushUI(uiName, isDialog)
 
     guiInfo.uiName = uiName;
     guiInfo.isDialog = isDialog;
-    guiInfo.prefab = LuaHelper.LoadGameObject(m_guiRoot .. '/' .. uiName);
-    guiInfo.gameObject = LuaHelper.CreateGameObject(guiInfo.prefab, m_canvas.transform);
+    guiInfo.prefab = LuaHelper.loadGameObject(m_guiRoot .. '/' .. uiName);
+    guiInfo.gameObject = LuaHelper.createGameObject(guiInfo.prefab, m_canvas.transform);
 
     GUIManager.bind_listener(uiName, guiInfo.gameObject.transform);
 

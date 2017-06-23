@@ -3,17 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using XLua;
 
-public class Init : MonoBehaviour
+namespace berry
 {
-
-    // Use this for initialization
-    void Start ()
+    public class Init : MonoBehaviour
     {
-        LuaManager.Instance.init ();
-        LuaManager.Instance.execute (@"
-            require('AppManager.lua');
-            AppManager.init();
-            AppManager.startup();
-        ");
+
+        // Use this for initialization
+        void Start ()
+        {
+#if true
+            gameObject.AddComponent<GameManager> ();
+#else
+            LuaManager.Instance.init ();
+            LuaManager.Instance.execute (@"
+                require('AppManager.lua');
+                AppManager.init();
+                AppManager.startup();
+            ");
+#endif
+        }
     }
 }

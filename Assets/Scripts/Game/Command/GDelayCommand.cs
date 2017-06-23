@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-namespace Pomelo
+namespace berry
 {
 
     public class GDelayCommand : GCommand
@@ -9,8 +9,6 @@ namespace Pomelo
         private float m_delay;
 
         private float m_endTime;
-
-#region GCommand implementation
 
         public GDelayCommand (float delay)
         {
@@ -22,11 +20,11 @@ namespace Pomelo
             m_endTime = Time.time + m_delay;
         }
 
-        public override void process ()
+        public override void exit ()
         {
         }
-
-        public override void exit ()
+        
+        public override void process ()
         {
         }
 
@@ -34,7 +32,5 @@ namespace Pomelo
         {
             return Time.time >= m_endTime;
         }
-
-#endregion
     }
 }

@@ -3,19 +3,11 @@ using System.Collections;
 
 namespace berry
 {
-
-    public class GNoneCommand : GCommand
+    public class GBattleInitUI : GCommand
     {
         public override void enter ()
         {
-        }
-
-        public override void exit ()
-        {
-        }
-        
-        public override void process ()
-        {
+            Debug.Log ("初始化游戏UI");
         }
 
         public override bool isDone ()

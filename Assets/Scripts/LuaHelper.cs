@@ -6,12 +6,12 @@ using UnityEngine;
 
 public static class LuaHelper
 {
-    public static UnityEngine.Object LoadGameObject (string path)
+    public static UnityEngine.Object loadGameObject (string path)
     {
         return Resources.Load (path);
     }
 
-    public static UnityEngine.GameObject CreateGameObject (GameObject prefab, Transform parent)
+    public static UnityEngine.GameObject createGameObject (GameObject prefab, Transform parent)
     {
         GameObject go = GameObject.Instantiate (prefab) as GameObject;
         go.name = prefab.name;
@@ -22,7 +22,7 @@ public static class LuaHelper
         return go;
     }
 
-    public static System.Type GetType (string classname)
+    public static System.Type getType (string classname)
     {
         System.Type t = null;
         try {
@@ -44,7 +44,7 @@ public static class LuaHelper
 
     }
 
-    public static Canvas GetCanvas ()
+    public static Canvas getCanvas ()
     {
         Canvas canvas = GameObject.FindObjectOfType<Canvas> ();
         if (canvas == null) {
