@@ -8,6 +8,7 @@ namespace x1.Framework
         private List<FAction> m_actionList;
         private FAction m_currentAction;
         private int m_currentIndex;
+        private bool m_isDone;
 
         public FSequence (params FAction[] actions)
         {
@@ -25,6 +26,14 @@ namespace x1.Framework
 
             m_currentIndex = -1;
             m_currentAction = null;
+            m_isDone = false;
+        }
+
+        public override void stop ()
+        {
+            base.stop ();
+
+            m_isDone = true;
         }
 
         public override void step (float deltaTime)
@@ -48,6 +57,11 @@ namespace x1.Framework
                     m_currentAction = null;
                 }
             }
+        }
+
+        public override bool isDone ()
+        {
+            return m_isDone;
         }
     }
 }
