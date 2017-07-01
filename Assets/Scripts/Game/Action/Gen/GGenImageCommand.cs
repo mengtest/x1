@@ -6,7 +6,7 @@ namespace x1.Game
 {
     using x1.Framework;
 
-    public class GGenImageCommand : GCommand
+    public class GGenImageCommand : FAction
     {
         private Transform m_parent;
 
@@ -15,15 +15,7 @@ namespace x1.Game
             m_parent = parent;
         }
 
-        public override void enter ()
-        {
-        }
-
-        public override void process ()
-        {
-        }
-
-        public override void exit ()
+        public override void stop ()
         {
             GameObject go = new GameObject ("genTexture");
             go.transform.parent = m_parent;
@@ -31,8 +23,13 @@ namespace x1.Game
             go.transform.localEulerAngles = Vector3.zero;
             go.transform.localScale = Vector3.one;
 
+            Sprite sprite = FResManager.getInstance ().getRes (FResID.SPRITE) as Sprite;
+            if (sprite == null) {
+                Debug.LogError ("请先执行" + typeof (FLoadAsset).FullName + "(FResID.SPRITE)");
+                return;
+            }
             Image imgCtrl = go.AddComponent<Image> ();
-            imgCtrl.sprite = FResManager.getInstance ().getRes (FResID.SPRITE) as Sprite;
+            imgCtrl.sprite = sprite;
             imgCtrl.SetNativeSize ();
         }
 

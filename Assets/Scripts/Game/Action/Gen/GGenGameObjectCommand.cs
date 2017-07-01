@@ -5,7 +5,7 @@ namespace x1.Game
 {
     using x1.Framework;
 
-    public class GGenGameObjectCommand : GCommand
+    public class GGenGameObjectCommand : FAction
     {
         private Transform m_parent;
 
@@ -14,11 +14,11 @@ namespace x1.Game
             m_parent = parent;
         }
 
-        public override void exit ()
+        public override void stop ()
         {
             UnityEngine.Object prefab = FResManager.getInstance ().getRes (FResID.PREFAB);
             if (prefab == null) {
-                Debug.LogError ("请先执行" + typeof (GLoadAssetCommand).FullName + "(FResID.PREFAB)");
+                Debug.LogError ("请先执行" + typeof (FLoadAsset).FullName + "(FResID.PREFAB)");
                 return;
             }
             GameObject.Instantiate (prefab, m_parent);

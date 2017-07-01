@@ -42,7 +42,7 @@ namespace x1.Framework
         /// <summary>
         /// fx
         /// </summary>
-        public const int FX = 6;
+        public const int FX = 7;
     }
     
 }

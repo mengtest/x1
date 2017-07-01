@@ -24,6 +24,7 @@ namespace x1.Framework
         public void runAction (FAction action)
         {
             m_actionList.Add (action);
+            action.start ();
         }
 
         public void step ()

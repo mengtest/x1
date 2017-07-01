@@ -14,6 +14,11 @@ namespace x1.Framework
             m_actionList = new List<FAction> (actions);
         }
 
+        public void addAction (FAction action)
+        {
+            m_actionList.Add (action);
+        }
+
         public override void start ()
         {
             base.start ();
@@ -26,8 +31,11 @@ namespace x1.Framework
         {
             if (m_currentAction == null) {
                 int idx = m_currentIndex + 1;
+
                 if (idx < m_actionList.Count) {
                     m_currentAction = m_actionList [idx];
+                    m_currentAction.start ();
+
                     m_currentIndex = idx;
                 } else {
                     stop ();

@@ -30,12 +30,9 @@ namespace x1.Game
             return m_inst;
         }
 
-        public List<ICommand> m_commandList;
-
         void Awake ()
         {
             m_inst = this;
-            m_commandList = new List<ICommand> ();
         }
 
         void Update ()
@@ -44,19 +41,6 @@ namespace x1.Game
                 return;
 
             m_actionManager.step ();
-        }
-
-        void FixedUpdate ()
-        {
-            processCommands ();
-        }
-
-        void processCommands ()
-        {
-            int cmdNum = m_commandList.Count;
-            for (int i = cmdNum - 1; i >= 0; --i) { // 倒序遍历,为了支持循环过程中删除元素
-                m_commandList [i].process ();
-            }
         }
 
         public void init ()
@@ -82,6 +66,8 @@ namespace x1.Game
 
         public void startGame ()
         {
+            var canvas = LuaHelper.getCanvas ();
+
             // TODO: 这里应该先进行判断,因为有可能外部lua文件版本比安装包中的版本新
             FHotfixManager.getInstance ().exportLuaScript ();
 
@@ -90,11 +76,14 @@ namespace x1.Game
                 AppManager.init();
                 AppManager.startup();
             ");
-//            GCommandSequence cmdSeq = new GCommandSequence ();
-//            cmdSeq.addCommand (new GCreateBattle (1));
-//            cmdSeq.addCommand (new GBattleLoadUI ());
-//            cmdSeq.addCommand (new GBattleInitUI ());
-//            cmdSeq.execute ();
+
+            FSequence seq = new FSequence ();
+            seq.addAction (new FLoadAsset (FResID.PREFAB, "GUI/UILoading"));
+            seq.addAction (new FLoadAsset (FResID.SPRITE, "Texture/item_04_043"));
+            seq.addAction (new GGenImageCommand (canvas.transform));
+            seq.addAction (new FUnloadAsset (FResID.SPRITE));
+            seq.addAction (new FUnloadAsset (FResID.PREFAB));
+            m_actionManager.runAction (seq);
         }
     }
 }
