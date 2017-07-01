@@ -81,6 +81,8 @@ namespace x1.Game
             seq.addAction (new FLoadAsset (FResID.PREFAB, "GUI/UILoading"));
             seq.addAction (new FLoadAsset (FResID.SPRITE, "Texture/item_04_043"));
             seq.addAction (new GGenImageCommand (canvas.transform));
+            seq.addAction (new FDelayTime (3.0f));
+            seq.addAction (new GGenGameObjectCommand (canvas.transform));
             seq.addAction (new FUnloadAsset (FResID.SPRITE));
             seq.addAction (new FUnloadAsset (FResID.PREFAB));
             m_actionManager.runAction (seq);
