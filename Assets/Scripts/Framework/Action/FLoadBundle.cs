@@ -1,4 +1,8 @@
-﻿using System;
+﻿/// <summary>
+/// 异步加载AssetBundle
+/// </summary>
+
+using System;
 
 namespace x1.Framework
 {

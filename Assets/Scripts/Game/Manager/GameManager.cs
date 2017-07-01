@@ -66,7 +66,6 @@ namespace x1.Game
 
         public void startGame ()
         {
-            var canvas = LuaHelper.getCanvas ();
 
             // TODO: 这里应该先进行判断,因为有可能外部lua文件版本比安装包中的版本新
             FHotfixManager.getInstance ().exportLuaScript ();
@@ -76,7 +75,8 @@ namespace x1.Game
                 AppManager.init();
                 AppManager.startup();
             ");
-
+#if false
+            var canvas = LuaHelper.getCanvas ();
             FSequence seq = new FSequence ();
             seq.addAction (new FLoadAsset (FResID.PREFAB, "GUI/UILoading"));
             seq.addAction (new FLoadAsset (FResID.SPRITE, "Texture/item_04_043"));
@@ -86,6 +86,7 @@ namespace x1.Game
             seq.addAction (new FUnloadAsset (FResID.SPRITE));
             seq.addAction (new FUnloadAsset (FResID.PREFAB));
             m_actionManager.runAction (seq);
+#endif
         }
     }
 }

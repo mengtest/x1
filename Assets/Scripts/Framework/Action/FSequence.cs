@@ -1,4 +1,8 @@
-﻿using System;
+﻿/// <summary>
+/// 队列执行
+/// </summary>
+
+using System;
 using System.Collections.Generic;
 
 namespace x1.Framework

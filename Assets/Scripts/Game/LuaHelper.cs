@@ -15,7 +15,7 @@ public static class LuaHelper
     {
         GameObject go = GameObject.Instantiate (prefab) as GameObject;
         go.name = prefab.name;
-        go.transform.parent = parent;
+        go.transform.SetParent (parent);
         go.transform.localPosition = Vector3.zero;
         go.transform.localScale = Vector3.one;
         go.transform.eulerAngles = Vector3.zero;

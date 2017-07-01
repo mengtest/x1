@@ -33,27 +33,24 @@ function GUIManager.popUI()
     table.remove(m_guilist, index);
 end
 
+-- 注册界面上的点击事件回调
 function GUIManager.bind_listener(uiName, trans)
     local childCount = trans.childCount;
     for i = 0, childCount - 1 do
         local child = trans:GetChild(i);
-        GUIManager.bind_listener(uiName, child);
+        GUIManager.bind_listener(uiName, child); -- 递归
     end
 
     local btn = trans:GetComponent("Button");
     if (btn ~= nil) then
         local luacode =
-            'local call = ' .. uiName .. 'Ctrl.' .. btn.name .. '_onClick;'
-            .. 'if (call ~= nil) then '
-            .. 'call();'
-            .. 'end'
-        ;
+            'local onClick = ' .. uiName .. 'Ctrl.' .. btn.name .. '_onClick;'
+            .. 'if (onClick ~= nil) then '
+            .. '    onClick();'
+            .. 'end\n'
+            .. 'log("' .. uiName .. 'Ctrl.' .. btn.name .. '_onClick");'
+        ; -- 注册点击事件
         local listener = load(luacode);
-        btn.onClick:AddListener(listener)
-        log("注册事件" ..uiName.. '.' .. btn.name);
+        btn.onClick:AddListener(listener);
     end
-end
-
-function GUIManager.btn_on_click()
-    log("牛逼")
 end
