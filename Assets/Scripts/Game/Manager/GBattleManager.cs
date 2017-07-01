@@ -18,26 +18,11 @@ namespace x1.Game
         {
             switch (levelId) {
             case 1:
-                return new GBattlePVE ();
+                return new GBattlePVE_1 ();
             default:
                 break;
             }
             return null;
         }
-    }
-
-    public class GBattleBase
-    {
-        public static GBattleBase m_currentBattle;
-
-        public GBattleBase ()
-        {
-            m_currentBattle = this;
-        }
-    }
-
-    public class GBattlePVE : GBattleBase
-    {
-
     }
 }

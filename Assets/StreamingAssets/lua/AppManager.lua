@@ -5,6 +5,8 @@ require("GUIManager.lua");
 require("View/UILoading.lua");
 require("Ctrl/UILoadingCtrl.lua");
 require("Ctrl/UIDialogCtrl.lua")
+require("View/UIMainPanel.lua")
+require("Ctrl/UIMainPanelCtrl.lua")
 
 AppManager = {};
 
@@ -13,6 +15,6 @@ function AppManager.init()
 end
 
 function AppManager.startup()
-    GUIManager.pushUI("UILoading");
+    GUIManager.pushUI("UIMainPanel");
 end
 
