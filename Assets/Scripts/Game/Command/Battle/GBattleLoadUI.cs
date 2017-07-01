@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace berry
+namespace x1.Game
 {
+    using x1.Framework;
+
     public class GBattleLoadUI : GCommand
     {
         private GCommandSequence m_cmdSeq;

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace berry
+namespace x1.Game
 {
     public class GCommandSequence : GCommand
     {
