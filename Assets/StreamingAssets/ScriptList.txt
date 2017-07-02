@@ -1,0 +1,12 @@
+AppConst.lua
+AppManager.lua
+ButtonEvent.lua
+Common.lua
+GUIManager.lua
+Ctrl/UIDialogCtrl.lua
+Ctrl/UILoadBattlePanelCtrl.lua
+Ctrl/UILoadingCtrl.lua
+Ctrl/UIMainPanelCtrl.lua
+View/UILoadBattlePanel.lua
+View/UILoading.lua
+View/UIMainPanel.lua

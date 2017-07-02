@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace x1.Game
+namespace x1.Framework
 {
     public static class Util
     {
@@ -45,21 +45,9 @@ namespace x1.Game
 
         }
 
-        public static Canvas getCanvas ()
+        public static string readText (string path)
         {
-            Canvas canvas = GameObject.FindObjectOfType<Canvas> ();
-            if (canvas == null) {
-                GameObject go = new GameObject ("Canvas");
-                canvas = go.AddComponent<Canvas> ();
-                var scaler = go.AddComponent<UnityEngine.UI.CanvasScaler> ();
-                go.AddComponent<UnityEngine.UI.GraphicRaycaster> ();
-
-                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-                scaler.uiScaleMode = UnityEngine.UI.CanvasScaler.ScaleMode.ScaleWithScreenSize;
-                scaler.screenMatchMode = UnityEngine.UI.CanvasScaler.ScreenMatchMode.Expand;
-                scaler.referenceResolution = new Vector2 (1080, 1920);
-            }
-            return canvas;
+            return System.IO.File.ReadAllText (path);
         }
     }
 }

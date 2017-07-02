@@ -43,6 +43,11 @@ namespace x1.Framework
         /// fx
         /// </summary>
         public const int FX = 7;
+
+        /// <summary>
+        /// 游戏对象,由FGenGameObject创建
+        /// </summary>
+        public const int GAMEOBJECT = 8;
     }
     
 }

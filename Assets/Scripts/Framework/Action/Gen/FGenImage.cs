@@ -2,15 +2,13 @@
 using UnityEngine.UI;
 using System.Collections;
 
-namespace x1.Game
+namespace x1.Framework
 {
-    using x1.Framework;
-
-    public class GGenImageCommand : FAction
+    public class FGenImage : FAction
     {
         private Transform m_parent;
 
-        public GGenImageCommand (Transform parent)
+        public FGenImage (Transform parent)
         {
             m_parent = parent;
         }
@@ -25,7 +23,7 @@ namespace x1.Game
 
             Sprite sprite = FResManager.getInstance ().getRes (FResID.SPRITE) as Sprite;
             if (sprite == null) {
-                Debug.LogError ("请先执行" + typeof (FLoadAsset).FullName + "(FResID.SPRITE)");
+                Debug.LogError ("请先执行" + typeof(FLoadAsset).FullName + "(FResID.SPRITE)");
                 return;
             }
             Image imgCtrl = go.AddComponent<Image> ();

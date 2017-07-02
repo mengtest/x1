@@ -71,7 +71,6 @@ namespace x1.Game
             FHotfixManager.getInstance ().exportLuaScript ();
 
             FLuaManager.getInstance ().execute (@"
-                require('AppManager.lua');
                 AppManager.init();
                 AppManager.startup();
             ");

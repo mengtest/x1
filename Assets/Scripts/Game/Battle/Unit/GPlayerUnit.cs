@@ -2,11 +2,8 @@
 
 namespace x1.Game
 {
-    public class GPlayerUnit : IBattleUnit
+    public class GPlayerUnit : GRoleUnit
     {
-        public void step (float deltaTime)
-        {
-        }
     }
 }
 

@@ -8,10 +8,13 @@ namespace x1.Game
         {
             base.init ();
 
-            // 添加战斗单位
-            addUnit (new GPlayerUnit ());
-            for (int i = 0; i < 9; i++) {
-                addUnit (new GRobotUnit ());
+            for (uint i = 0; i < 10; i++) {
+                IHero hero = GHeroManager.createHero (i + 1);
+                GRoleUnit role = new GPlayerUnit ();
+                role.setHero (hero);
+                role.setSkinId (0);
+                role.setRoleId (i);
+                addUnit (role);                
             }
         }
     }

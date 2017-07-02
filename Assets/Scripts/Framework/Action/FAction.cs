@@ -4,8 +4,13 @@ namespace x1.Framework
 {
     public class FAction
     {
+        public void runAction ()
+        {
+            FActionManager.getInstance ().runAction (this);
+        }
+
         /// <summary>
-        /// 动作开始，如果你想开始执行一个动作，请使用FActionManager.runAction
+        /// 动作开始，如果你想开始执行一个动作，请使用runAction
         /// </summary>
         public virtual void start ()
         {

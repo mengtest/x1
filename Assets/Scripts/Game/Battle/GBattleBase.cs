@@ -25,6 +25,11 @@ namespace x1.Game
             m_battleUnits.Remove (unit);
         }
 
+        public IBattleUnit[] getUnits ()
+        {
+            return m_battleUnits.ToArray ();
+        }
+
         /// <summary>
         /// 初始化数据
         /// </summary>

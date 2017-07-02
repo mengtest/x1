@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.IO;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using XLua;
@@ -22,6 +23,13 @@ namespace x1.Framework
         {
             m_luaEnv = new LuaEnv ();
             m_luaEnv.AddLoader (loadLua);
+
+            string[] scriptList = File.ReadAllLines (FConst.F_SCRIPT_LIST_PATH);
+            string luacode = "";
+            foreach (var script in scriptList) {
+                luacode += string.Format ("require('{0}');", script);
+            }
+            execute (luacode);
         }
 
         public void execute (string luaCode)
@@ -29,8 +37,14 @@ namespace x1.Framework
             m_luaEnv.DoString (luaCode);
         }
 
+        public LuaEnv getEnv ()
+        {
+            return m_luaEnv;
+        }
+
         private byte[] loadLua (ref string filepath)
         {
+            Debug.Log ("load lua : " + filepath);
             byte[] scriptCode = null;
 #if UNITY_EDITOR
             WWW w = new WWW ("file:///" + Application.streamingAssetsPath + "/lua/" + filepath);
@@ -43,5 +57,6 @@ namespace x1.Framework
             w.Dispose ();
             return scriptCode;
         }
+
     }
 }

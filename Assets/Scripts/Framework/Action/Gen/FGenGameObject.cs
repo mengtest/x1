@@ -1,15 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace x1.Game
+namespace x1.Framework
 {
-    using x1.Framework;
-
-    public class GGenGameObjectCommand : FAction
+    public class FGenGameObject : FAction
     {
         private Transform m_parent;
 
-        public GGenGameObjectCommand (Transform parent)
+        public FGenGameObject (Transform parent)
         {
             m_parent = parent;
         }
@@ -18,10 +16,11 @@ namespace x1.Game
         {
             UnityEngine.Object prefab = FResManager.getInstance ().getRes (FResID.PREFAB);
             if (prefab == null) {
-                Debug.LogError ("请先执行" + typeof (FLoadAsset).FullName + "(FResID.PREFAB)");
+                Debug.LogError ("请先执行" + typeof(FLoadAsset).FullName + "(FResID.PREFAB)");
                 return;
             }
-            GameObject.Instantiate (prefab, m_parent);
+            GameObject go = GameObject.Instantiate (prefab, m_parent) as GameObject;
+            FResManager.getInstance ().setRes (FResID.GAMEOBJECT, go);
         }
 
         public override bool isDone ()
