@@ -9,6 +9,13 @@ namespace x1.Framework
     public class FLuaManager : IManager
     {
         private static FLuaManager m_luaManager;
+        
+        private LuaEnv m_luaEnv;
+
+        private float m_nextGCTime;
+
+        // 十秒一次
+        private const float m_luaGCInterval = 10;
 
         public static FLuaManager getInstance ()
         {
@@ -16,8 +23,6 @@ namespace x1.Framework
                 m_luaManager = new FLuaManager ();
             return m_luaManager;
         }
-
-        private LuaEnv m_luaEnv;
 
         public void init ()
         {
@@ -40,6 +45,14 @@ namespace x1.Framework
         public LuaEnv getEnv ()
         {
             return m_luaEnv;
+        }
+
+        public void step ()
+        {
+            if (Time.time > m_nextGCTime) {
+                m_luaEnv.Tick ();
+                m_nextGCTime = Time.time + m_luaGCInterval;
+            }
         }
 
         private byte[] loadLua (ref string filepath)

@@ -8,7 +8,7 @@ function UIMainPanelCtrl.mode1_onClick()
     battleInst:initUI();
     battleInst:enter();
     battleInst:start();
-    GUIManager.pushUI("UILoadBattlePanel");
+    GUIManager.pushPanel("UILoadBattlePanel");
 end
 
 function UIMainPanelCtrl.mode2_onClick()

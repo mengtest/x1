@@ -6,14 +6,7 @@ namespace x1.Game
 {
     public class GBattleBase
     {
-        private static GBattleBase m_currentBattle;
-
         private List<IBattleUnit> m_battleUnits;
-
-        public static GBattleBase getInstance ()
-        {
-            return m_currentBattle;
-        }
 
         public void addUnit (IBattleUnit unit)
         {
@@ -35,7 +28,6 @@ namespace x1.Game
         /// </summary>
         public virtual void init ()
         {
-            m_currentBattle = this;
             m_battleUnits = new List<IBattleUnit> ();
         }
 

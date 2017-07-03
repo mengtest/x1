@@ -2,6 +2,7 @@
 
 namespace x1.Framework
 {
+    [XLua.LuaCallCSharp]
     public static class FActionPlugin
     {
         public static void runAction (this System.Object caller, FAction action)
@@ -10,6 +11,7 @@ namespace x1.Framework
         }
     }
 
+    [XLua.LuaCallCSharp]
     public class FAction
     {
         protected System.Object m_object;

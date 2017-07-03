@@ -41,6 +41,7 @@ namespace x1.Game
                 return;
 
             m_actionManager.step ();
+            m_luaManager.step ();
         }
 
         public void init ()

@@ -1,5 +1,7 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Events;
 
 namespace x1.Framework
 {
@@ -7,14 +9,15 @@ namespace x1.Framework
 
     public class FLuaBehaviour : MonoBehaviour
     {
-#if true
+        private Action luaInit;
         private Action luaAwake;
+        private Action luaOnEnable;
+        private Action luaOnDisable;
         private Action luaStart;
         private Action luaUpdate;
         private Action luaFixedUpdate;
         private Action luaOnDestroy;
 
-        private LuaTable scriptEnv;
         private FLuaManager m_luaManager;
         private string m_className;
 
@@ -23,35 +26,43 @@ namespace x1.Framework
             m_className = gameObject.name;
             m_luaManager = FLuaManager.getInstance ();
             LuaEnv luaEnv = m_luaManager.getEnv ();
-            scriptEnv = luaEnv.NewTable ();
+            LuaTable viewScript = luaEnv.Global.GetInPath<LuaTable> (m_className);
+            LuaTable ctrlScript = luaEnv.Global.GetInPath<LuaTable> (m_className + "Ctrl");
 
-            LuaTable meta = luaEnv.NewTable ();
-            meta.Set ("__index", luaEnv.Global);
-            scriptEnv.SetMetaTable (meta);
-            meta.Dispose ();
+            viewScript.Set ("gameObject", gameObject);
+            viewScript.Set ("transform", transform);
 
-            scriptEnv.Set ("gameObject", gameObject);
-            scriptEnv.Set ("transform", transform);
-            scriptEnv.Set ("this", this);
-//            foreach (var injection in injections)
-//            {
-//                scriptEnv.Set(injection.name, injection.value);
-//            }
+            luaInit = viewScript.Get<Action> ("init");
+            luaAwake = viewScript.Get<Action> ("Awake");
+            luaOnEnable = viewScript.Get<Action> ("OnEnable");
+            luaOnDisable = viewScript.Get<Action> ("OnDisable");
+            luaStart = viewScript.Get<Action> ("Start");
+            luaUpdate = viewScript.Get<Action> ("Update");
+            luaFixedUpdate = viewScript.Get<Action> ("FixedUpdate");
+            luaOnDestroy = viewScript.Get<Action> ("OnDestroy");
 
-            string viewScript = Util.readText (FConst.F_SCRIPT_ROOT + "/View/" + m_className + ".lua");
-            string ctrlScript = Util.readText (FConst.F_SCRIPT_ROOT + "/Ctrl/" + m_className + "Ctrl.lua");
-            luaEnv.DoString (viewScript, "LuaBehaviour", scriptEnv);
-            luaEnv.DoString (ctrlScript, "LuaBehaviour", scriptEnv);
-
-            luaAwake = scriptEnv.Get<Action> ("Awake");
-            luaStart = scriptEnv.Get<Action> ("Start");
-            luaUpdate = scriptEnv.Get<Action> ("Update");
-            luaFixedUpdate = scriptEnv.Get<Action> ("FixedUpdate");
-            luaOnDestroy = scriptEnv.Get<Action> ("OnDestroy");
-
+            var btns = transform.GetComponentsInChildren<Button> (true);
+            foreach (var btn in btns) {
+                UnityAction onClick = ctrlScript.Get<UnityAction> (btn.name + "_onClick");
+                if (onClick != null)
+                    btn.onClick.AddListener (onClick);
+            }
+            luaInit ();
             if (luaAwake != null) {
                 luaAwake ();
             }
+        }
+
+        void OnEnable ()
+        {
+            if (luaOnEnable != null)
+                luaOnEnable ();
+        }
+
+        void OnDisable ()
+        {
+            if (luaOnDisable != null)
+                luaOnDisable ();
         }
 
         // Use this for initialization
@@ -65,77 +76,26 @@ namespace x1.Framework
         // Update is called once per frame
         void Update ()
         {
-            if (luaUpdate != null) {
+            if (luaUpdate != null)
                 luaUpdate ();
-            }
-//            if (Time.time - LuaBehaviour.lastGCTime > GCInterval) {
-//                luaEnv.Tick ();
-//                LuaBehaviour.lastGCTime = Time.time;
-//            }
         }
 
         void FixedUpdate ()
         {
-            if (luaFixedUpdate != null) {
+            if (luaFixedUpdate != null)
                 luaFixedUpdate ();
-            }
         }
 
         void OnDestroy ()
         {
-            if (luaOnDestroy != null) {
+            if (luaOnDestroy != null)
                 luaOnDestroy ();
-            }
+            
             luaAwake = null;
             luaOnDestroy = null;
             luaUpdate = null;
             luaStart = null;
-            scriptEnv.Dispose ();
-//            injections = null;
         }
-
-#else
-        private string m_className;
-        private FLuaManager m_luaManager;
-
-        void Awake ()
-        {
-            m_className = gameObject.name;
-            m_luaManager = FLuaManager.getInstance ();
-
-            m_luaManager.execute (m_className + ".Awake();");
-        }
-
-        void Start ()
-        {
-            m_luaManager.execute (m_className + ".Start();");
-        }
-
-        void Update ()
-        {
-            m_luaManager.execute (m_className + ".Update();");
-        }
-
-        void FixedUpdate ()
-        {
-            m_luaManager.execute (m_className + ".FixedUpdate();");
-        }
-
-        void OnEnable ()
-        {
-            m_luaManager.execute (m_className + ".OnEnable();");
-        }
-
-        void OnDisable ()
-        {
-            m_luaManager.execute (m_className + ".OnDisable();");
-        }
-
-        void OnDistory ()
-        {
-            m_luaManager.execute (m_className + ".OnDestory();");
-        }
-#endif
     }
 }
 

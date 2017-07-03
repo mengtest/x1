@@ -60,7 +60,10 @@ namespace x1.Framework
             seq.addAction (new FCallFunc (delegate() {
                 GameObject go = FResManager.getInstance ().getRes (FResID.GAMEOBJECT) as GameObject;
                 go.name = uiName;
-                go.AddComponent<FLuaBehaviour> ();
+                FLuaBehaviour luaBehaviour = go.GetComponent<FLuaBehaviour> ();
+                if (luaBehaviour == null)
+                    luaBehaviour = go.AddComponent<FLuaBehaviour> ();
+                
                 if (loaded != null)
                     loaded (go);
             }));
