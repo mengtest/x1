@@ -14,7 +14,7 @@ namespace x1.Game
         {
             FSequence seq = new FSequence ();
             seq.addAction (new GLoadBattle (GBattleBase.getInstance ()));
-            seq.runAction ();
+            this.runAction (seq);
         }
 	
         // Update is called once per frame

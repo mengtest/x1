@@ -21,7 +21,7 @@ namespace x1.Framework
             m_request = null;
         }
 
-        public override void start ()
+        public override void start (System.Object obj)
         {
             UnityEngine.AssetBundle bundle = FResManager.getInstance ().getRes (FResID.ASSETBUNDLE) as UnityEngine.AssetBundle;
             m_request = bundle.LoadAssetAsync (m_resPath.ToLower ()); // AssetBundle中所有资源名称和路径都是小写

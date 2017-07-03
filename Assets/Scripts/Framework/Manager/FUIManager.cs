@@ -64,7 +64,7 @@ namespace x1.Framework
                 if (loaded != null)
                     loaded (go);
             }));
-            seq.runAction ();
+            this.runAction (seq);
         }
 
         public void popPanel ()

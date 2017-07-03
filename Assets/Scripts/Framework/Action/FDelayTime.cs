@@ -13,7 +13,7 @@ namespace x1.Framework
             m_delay = delay;
         }
 
-        public override void start ()
+        public override void start (System.Object obj)
         {
             m_endTime = UnityEngine.Time.time + m_delay;
         }

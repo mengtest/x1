@@ -11,10 +11,6 @@ namespace x1.Framework
             m_resId = resId;
         }
 
-        public override void start ()
-        {
-        }
-
         public override void stop ()
         {
             UnityEngine.Object res = FResManager.getInstance ().getRes (m_resId);

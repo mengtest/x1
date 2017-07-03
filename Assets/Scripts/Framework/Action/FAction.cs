@@ -2,18 +2,24 @@
 
 namespace x1.Framework
 {
+    public static class FActionPlugin
+    {
+        public static void runAction (this System.Object caller, FAction action)
+        {
+            FActionManager.getInstance ().runAction (action, caller);
+        }
+    }
+
     public class FAction
     {
-        public void runAction ()
-        {
-            FActionManager.getInstance ().runAction (this);
-        }
+        protected System.Object m_object;
 
         /// <summary>
         /// 动作开始，如果你想开始执行一个动作，请使用runAction
         /// </summary>
-        public virtual void start ()
+        public virtual void start (System.Object obj)
         {
+            setObject (obj);
         }
 
         /// <summary>
@@ -42,6 +48,16 @@ namespace x1.Framework
         public virtual bool isDone ()
         {
             return false;
+        }
+
+        public virtual System.Object getObject ()
+        {
+            return m_object;
+        }
+
+        public virtual void setObject (System.Object obj)
+        {
+            m_object = obj;
         }
     }
 }

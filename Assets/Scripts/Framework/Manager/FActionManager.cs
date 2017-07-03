@@ -21,10 +21,10 @@ namespace x1.Framework
             m_actionList = new List<FAction> ();
         }
 
-        public void runAction (FAction action)
+        public void runAction (FAction action, System.Object caller)
         {
             m_actionList.Add (action);
-            action.start ();
+            action.start (caller);
         }
 
         public void step ()

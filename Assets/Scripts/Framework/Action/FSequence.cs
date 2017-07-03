@@ -24,9 +24,9 @@ namespace x1.Framework
             m_actionList.Add (action);
         }
 
-        public override void start ()
+        public override void start (System.Object obj)
         {
-            base.start ();
+            base.start (obj);
 
             m_currentIndex = -1;
             m_currentAction = null;
@@ -47,7 +47,7 @@ namespace x1.Framework
 
                 if (idx < m_actionList.Count) {
                     m_currentAction = m_actionList [idx];
-                    m_currentAction.start ();
+                    m_currentAction.start (getObject ());
 
                     m_currentIndex = idx;
                 } else {

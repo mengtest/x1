@@ -15,7 +15,7 @@ namespace x1.Game
             m_battle = battle;
         }
 
-        public override void start ()
+        public override void start (System.Object obj)
         {
             GameObject panel = GameObject.Find ("UILoadBattlePanel");
             IBattleUnit[] units = m_battle.getUnits ();
@@ -35,7 +35,7 @@ namespace x1.Game
                     UnityEngine.Debug.Log (role.getHero ().getSkinTexture (role.getSkinId ()));
                 }
             }
-            seq.runAction ();
+            this.runAction (seq);
         }
 
         public override bool isDone ()

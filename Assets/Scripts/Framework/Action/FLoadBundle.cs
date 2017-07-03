@@ -18,7 +18,7 @@ namespace x1.Framework
             m_request = null;
         }
 
-        public override void start ()
+        public override void start (System.Object obj)
         {
             m_request = UnityEngine.AssetBundle.LoadFromFileAsync (m_bundlePath);
         }
