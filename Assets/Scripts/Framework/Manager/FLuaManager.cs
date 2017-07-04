@@ -60,9 +60,9 @@ namespace x1.Framework
             Debug.Log ("load lua : " + filepath);
             byte[] scriptCode = null;
 #if UNITY_EDITOR
-            WWW w = new WWW ("file:///" + Application.streamingAssetsPath + "/lua/" + filepath);
+            WWW w = new WWW ("file:///" + Application.streamingAssetsPath + "/Scripts/lua/" + filepath);
 #else
-            WWW w = new WWW (Application.streamingAssetsPath + "/lua/" + filepath);
+            WWW w = new WWW (Application.streamingAssetsPath + "/Scripts/lua/" + filepath);
 #endif
             while (w.isDone == false) // TODO: 手机上用其他方式读取不了 streamingAssets 目录,WWW又是异步执行,所以这里先用循环解决此问题.以后会将此目录下所有文件拷贝至 persistentDataPath 目录下
                 ;
