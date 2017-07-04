@@ -7,16 +7,16 @@ namespace x1.Framework
     {
         private Transform m_trans;
 
-        public override void setObject (System.Object obj)
+        public override void setTarget (System.Object obj)
         {
-            base.setObject (obj);
+            base.setTarget (obj);
 
-            if (obj is UnityEngine.GameObject) {
+            if ((obj as UnityEngine.GameObject) != null) { // obj被销毁后 (obj is UnityEngine.GameObject) 会返回true,所以这里用 as
                 setTransform ((obj as UnityEngine.GameObject).transform);
-            } else if (obj is UnityEngine.Component) {
+            } else if ((obj as UnityEngine.Component) != null) { // obj被销毁后 (obj is UnityEngine.Component) 会返回true,所以这里用 as
                 setTransform ((obj as UnityEngine.Component).transform);
             } else {
-                Debug.LogError ("无法从未知类型中获取Transform对象");
+//                Debug.LogError ("无法从未知类型中获取Transform对象");
             }
         }
 

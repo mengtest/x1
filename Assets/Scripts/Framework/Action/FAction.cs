@@ -3,25 +3,16 @@
 namespace x1.Framework
 {
     [XLua.LuaCallCSharp]
-    public static class FActionPlugin
-    {
-        public static void runAction (this System.Object caller, FAction action)
-        {
-            FActionManager.getInstance ().runAction (action, caller);
-        }
-    }
-
-    [XLua.LuaCallCSharp]
     public class FAction
     {
-        protected System.Object m_object;
+        private System.Object m_target;
 
         /// <summary>
         /// 动作开始，如果你想开始执行一个动作，请使用runAction
         /// </summary>
-        public virtual void start (System.Object obj)
+        public virtual void start (System.Object target)
         {
-            setObject (obj);
+            setTarget (target);
         }
 
         /// <summary>
@@ -49,17 +40,17 @@ namespace x1.Framework
 
         public virtual bool isDone ()
         {
-            return false;
+            return true;
         }
 
-        public virtual System.Object getObject ()
+        public virtual System.Object getTarget ()
         {
-            return m_object;
+            return m_target;
         }
 
-        public virtual void setObject (System.Object obj)
+        public virtual void setTarget (System.Object obj)
         {
-            m_object = obj;
+            m_target = obj;
         }
     }
 }

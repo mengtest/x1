@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace x1.Framework
 {
-    public class FRepeatForever : FFiniteTimeAction
+    public class FRepeatForever : FAction
     {
         private FAction m_innerAction;
 
@@ -26,11 +26,11 @@ namespace x1.Framework
 
         public override void step (float deltaTime)
         {
-//        base.step (deltaTime);
-            m_innerAction.step (deltaTime);
             if (m_innerAction.isDone ()) {
-                m_innerAction.start (this.getObject ());
+                m_innerAction.stop ();
+                m_innerAction.start (this.getTarget ());
             }
+            m_innerAction.step (deltaTime);
         }
     }
 }

@@ -18,12 +18,16 @@ namespace x1.Framework
         {
             base.start (obj);
 
-            m_fromEulerAngles = getTransform ().localEulerAngles;
+            Transform transform = getTransform ();
+            if (transform)
+                m_fromEulerAngles = transform.localEulerAngles;
         }
 
         public override void update (float percent)
         {
-            getTransform ().localEulerAngles = Vector3.Lerp (m_fromEulerAngles, m_targetEulerAngles, percent);
+            Transform transform = getTransform ();
+            if (transform)
+                transform.localEulerAngles = Vector3.Lerp (m_fromEulerAngles, m_targetEulerAngles, percent);
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace x1.Framework
 {
-    public class FRepeat : FFiniteTimeAction
+    public class FRepeat : FAction
     {
         private FAction m_innerAction;
 
@@ -68,7 +68,7 @@ namespace x1.Framework
 
                 ++m_times;
                 if (m_times < m_totalTimes) {
-                    m_innerAction.start (this.getObject ());
+                    m_innerAction.start (this.getTarget ());
                 } else {
                     this.stop ();
                 }

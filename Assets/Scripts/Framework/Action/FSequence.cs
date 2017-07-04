@@ -47,18 +47,19 @@ namespace x1.Framework
 
                 if (idx < m_actionList.Count) {
                     m_currentAction = m_actionList [idx];
-                    m_currentAction.start (getObject ());
+                    m_currentAction.start (getTarget ());
 
                     m_currentIndex = idx;
                 } else {
                     stop ();
                 }
             } else {
-                m_currentAction.step (deltaTime);
 
                 if (m_currentAction.isDone ()) {
                     m_currentAction.stop ();
                     m_currentAction = null;
+                } else {
+                    m_currentAction.step (deltaTime);
                 }
             }
         }

@@ -18,14 +18,18 @@ namespace x1.Framework
         {
             base.start (obj);
 
-            m_fromPos = getTransform ().localPosition;
+            Transform transform = getTransform ();
+            if (transform)
+                m_fromPos = transform.localPosition;
         }
 
         public override void update (float percent)
         {
             base.update (percent);
 
-            getTransform ().localPosition = Vector3.Lerp (m_fromPos, m_targetPos, percent);
+            Transform transform = getTransform ();
+            if (transform)
+                transform.localPosition = Vector3.Lerp (m_fromPos, m_targetPos, percent);
         }
     }
 }

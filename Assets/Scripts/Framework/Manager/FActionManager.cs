@@ -21,7 +21,7 @@ namespace x1.Framework
             m_actionList = new List<FAction> ();
         }
 
-        public void runAction (FAction action, System.Object caller)
+        public void runAction (System.Object caller, FAction action)
         {
             m_actionList.Add (action);
             action.start (caller);
@@ -32,15 +32,24 @@ namespace x1.Framework
             float deltaTime = UnityEngine.Time.deltaTime;
 
             m_actionList.ForEach (delegate(FAction action) { // List<T>.ForEach 支持遍历过程中删除元素
-                action.step (deltaTime);
-                
                 if (action.isDone ()) {
                     action.stop ();
-
                     m_actionList.Remove (action); // 删除元素
+                } else {
+                    action.step (deltaTime);
                 }
             });
         }
     }
+
+    [XLua.LuaCallCSharp]
+    public static class FActionPlugin
+    {
+        public static void runAction (this System.Object caller, FAction action)
+        {
+            FActionManager.getInstance ().runAction (caller, action);
+        }
+    }
+
 }
 
