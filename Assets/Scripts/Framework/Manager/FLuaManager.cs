@@ -112,12 +112,13 @@ namespace x1.Framework
 
         private byte[] loadScript (ref string filepath)
         {
-            Debug.Log (string.Format ("加载script : @ {0} @", filepath));
 #if UNITY_EDITOR
-            return Util.readBytesByWWW ("file:///" + FConst.F_INTERNAL_SCRIPT_ROOT + "/" + filepath);
+            string path = FConst.F_INTERNAL_SCRIPT_ROOT + "/" + filepath;
 #else
-            return Util.readBytesByWWW ("file:///" + FConst.F_EXTERNAL_SCRIPT_ROOT + "/" + filepath);
+            string path = FConst.F_EXTERNAL_SCRIPT_ROOT + "/" + filepath;
 #endif
+            Debug.Log (string.Format ("加载script : @ {0} @", path));
+            return Util.readBytesByWWW ("file:///" + path);
         }
     }
 }
