@@ -30,8 +30,6 @@ namespace x1.Framework
         {
             base.start (obj);
 
-            Debug.Log ("开始时帧数 : " + Time.frameCount);
-
             Transform transform = getTransform ();
             if (transform) {
                 m_fromRotation = transform.localRotation;
@@ -42,13 +40,10 @@ namespace x1.Framework
         public override void stop ()
         {
             base.stop ();
-
-            Debug.Log ("结束时帧数 : " + Time.frameCount);
         }
 
         public override void update (float percent)
         {
-            Debug.Log ("update at frame : " + Time.frameCount);
             Transform transform = getTransform ();
             if (transform)
                 transform.localRotation = Quaternion.Lerp (m_fromRotation, m_targetRotation, percent);

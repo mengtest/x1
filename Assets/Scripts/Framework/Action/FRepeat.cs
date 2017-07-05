@@ -69,7 +69,7 @@ namespace x1.Framework
                 ++m_times;
                 if (m_times < m_totalTimes) {
                     m_innerAction.start (this.getTarget ());
-                    m_innerAction.step (deltaTime);
+                    m_innerAction.step (0);
                 } else {
                     this.stop ();
                 }

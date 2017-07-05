@@ -26,12 +26,11 @@ namespace x1.Framework
 
         public override void step (float deltaTime)
         {
-            Debug.Log ("FRepeatForever : " + Time.frameCount);
             m_innerAction.step (deltaTime);
             if (m_innerAction.isDone ()) {
                 m_innerAction.stop ();
                 m_innerAction.start (this.getTarget ());
-                m_innerAction.step (deltaTime);
+                m_innerAction.step (0);
             }
         }
     }
