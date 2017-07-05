@@ -13,7 +13,7 @@ public class TestAction : MonoBehaviour
         FActionManager.getInstance ().init ();
 
         FSequence seq = new FSequence ();
-#if false
+#if true
         FSpawn spawn1 = new FSpawn ();
         spawn1.addAction (new FMoveTo (1f, Vector2.right * 10));
         spawn1.addAction (new FScaleTo (1f, Vector3.one * 5));
@@ -30,10 +30,10 @@ public class TestAction : MonoBehaviour
 #if false
         seq.addAction (new FMoveBy (1f, Vector3.right * 10));
 #endif
-#if true
+#if false
         seq.addAction (new FRotateBy (1f, new Vector3 (0, 0, 270)));
 #endif
-        m_target.runAction (new FRepeatForever (new FRotateBy (0.4f, new Vector3 (0, 0, 90))));
+        m_target.runAction (new FRepeatForever (seq));
     }
     
     // Update is called once per frame

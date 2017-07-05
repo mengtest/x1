@@ -18,7 +18,7 @@ namespace x1.Framework
                     foreach (var script in scriptList) {
                         string relativePath = script.Remove (0, scriptRoot.Length + 1);
                         relativePath = relativePath.Replace ('\\', '/');
-                        w.WriteLine (relativePath);
+                        w.Write (relativePath + "\n");
                     }
                 }
             }

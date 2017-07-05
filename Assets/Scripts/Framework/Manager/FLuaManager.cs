@@ -56,55 +56,68 @@ namespace x1.Framework
             string fromPath = FConst.F_INTERNAL_SCRIPT_ROOT;
             string toPath = FConst.F_EXTERNAL_SCRIPT_ROOT;
 
-            string[] files = File.ReadAllLines (FConst.F_INTERNAL_SCRIPT_LIST_PATH);
             FSequence seq = new FSequence ();
+#if UNITY_EDITOR
+            string[] files = Util.readTextByWWW ("file:///" + FConst.F_INTERNAL_SCRIPT_LIST_PATH).Split ('\n');
+#else
+            string[] files = Util.readTextByWWW (FConst.F_INTERNAL_SCRIPT_LIST_PATH).Split ('\n');
+#endif
             foreach (var filename in files) {
-                string url = "file:///" + fromPath + "/" + filename;
-                var http = new FHttpRequest (url);
-                var call = new FCallFunc (delegate() {
-                    WWW w = FNetworkManager.getInstance ().getRequest (url);
-                    string path = toPath + "/" + filename;
-                    string dir = Path.GetDirectoryName (path);
-                    if (Directory.Exists (dir) == false)
-                        Directory.CreateDirectory (dir);
-                    
-                    File.WriteAllBytes (path, w.bytes);
-                });
-                seq.addAction (http);
-                seq.addAction (call);
+                if (string.IsNullOrEmpty (filename))
+                    continue;
+
+                seq.addAction (exportScript (fromPath + "/" + filename, toPath + "/" + filename));
             }
+            seq.addAction (exportScript (FConst.F_INTERNAL_SCRIPT_LIST_PATH, FConst.F_EXTERNAL_SCRIPT_LIST_PATH));
             this.runAction (seq);
+            return seq;
+        }
+
+        private FAction exportScript (string fromPath, string toPath)
+        {
+            FSequence seq = new FSequence ();
+#if UNITY_EDITOR
+            string url = "file:///" + fromPath;
+#else
+            string url = fromPath;
+#endif
+            var http = new FHttpRequest (url);
+            var call = new FCallFunc (delegate() {
+                WWW req = FNetworkManager.getInstance ().getRequest (url);
+                string dir = Path.GetDirectoryName (toPath);
+                if (Directory.Exists (dir) == false)
+                    Directory.CreateDirectory (dir);
+
+                File.WriteAllBytes (toPath, req.bytes);
+                Debug.Log (string.Format ("导出script : @ {0} @", toPath));
+                FNetworkManager.getInstance ().cleanRequest (url);
+            });
+            seq.addAction (http);
+            seq.addAction (call);
             return seq;
         }
 
         public void importScript ()
         {
-#if DEBUG
-            string[] scriptList = File.ReadAllLines (FConst.F_INTERNAL_SCRIPT_LIST_PATH);
-#else
-            string[] scriptList = File.ReadAllLines (FConst.F_EXTERNAL_SCRIPT_LIST_PATH);
-#endif
+            string[] scriptList = Util.readTextByWWW ("file:///" + FConst.F_EXTERNAL_SCRIPT_LIST_PATH).Split ('\n');
             string luacode = "";
-            foreach (var script in scriptList) {
-                luacode += string.Format ("require('{0}');", script);
+            foreach (var scriptName in scriptList) {
+                if (string.IsNullOrEmpty (scriptName))
+                    continue;
+                
+                luacode += string.Format ("require('{0}');", scriptName);
             }
-            execute (luacode);
+            execute (luacode); // 直接加载所有lua代码
         }
 
         private byte[] loadScript (ref string filepath)
         {
-            Debug.Log ("load lua : " + filepath);
-            byte[] scriptCode = null;
+            Debug.Log (string.Format ("加载script : @ {0} @", filepath));
 #if UNITY_EDITOR
-            WWW w = new WWW ("file:///" + FConst.F_INTERNAL_SCRIPT_ROOT + "/" + filepath);
+            return Util.readBytesByWWW ("file:///" + FConst.F_INTERNAL_SCRIPT_ROOT + "/" + filepath);
 #else
-            WWW w = new WWW (FConst.F_EXTERNAL_SCRIPT_ROOT + "/" + filepath);
+            return Util.readBytesByWWW ("file:///" + FConst.F_EXTERNAL_SCRIPT_ROOT + "/" + filepath);
 #endif
-            while (w.isDone == false) // TODO: 手机上用其他方式读取不了 streamingAssets 目录,WWW又是异步执行,所以这里先用循环解决此问题.以后会将此目录下所有文件拷贝至 persistentDataPath 目录下
-                ;
-            scriptCode = w.bytes;
-            w.Dispose ();
-            return scriptCode;
         }
     }
 }

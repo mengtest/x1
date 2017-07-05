@@ -72,9 +72,12 @@ namespace x1.Game
             FSequence seq = new FSequence ();
             seq.addAction (new FWaitFor (m_luaManager.exportScript ()));
             seq.addAction (new FCallFunc (delegate() {
-                Debug.Log ("导出完成");
+                Debug.Log ("scripts导出完成");
             }));
             seq.addAction (new FCallFunc (m_luaManager.importScript));
+            seq.addAction (new FCallFunc (delegate() {
+                Debug.Log ("scripts加载完成");
+            }));
             seq.addAction (new FCallFunc (delegate() {
                 m_luaManager.execute (@"
                     AppManager.init();

@@ -39,6 +39,15 @@ namespace x1.Framework
         {
             m_requestList.Add (url, w);
         }
+
+        public void cleanRequest (string url)
+        {
+            WWW w = null;
+            if (m_requestList.TryGetValue (url, out w)) {
+                w.Dispose ();
+                m_requestList.Remove (url);
+            }
+        }
     }
 }
 

@@ -49,6 +49,30 @@ namespace x1.Framework
         {
             return System.IO.File.ReadAllText (path);
         }
+
+        public static string readTextByWWW (string path)
+        {
+            using (WWW w = new WWW (path)) {
+                while (w.isDone == false)
+                    ; // 这样简单粗暴
+                if (string.IsNullOrEmpty (w.error) == false)
+                    Debug.LogError (w.error);
+                return w.text;
+            }
+            return null;
+        }
+
+        public static byte[] readBytesByWWW (string path)
+        {
+            using (WWW w = new WWW (path)) {
+                while (w.isDone == false)
+                    ; // 这样简单粗暴
+                if (string.IsNullOrEmpty (w.error) == false)
+                    Debug.LogError (w.error);
+                return w.bytes;
+            }
+            return null;
+        }
     }
 }
 
