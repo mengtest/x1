@@ -69,12 +69,19 @@ namespace x1.Game
         {
 
             // TODO: 这里应该先进行判断,因为有可能外部lua文件版本比安装包中的版本新
-            FHotfixManager.getInstance ().exportLuaScript ();
-
-            FLuaManager.getInstance ().execute (@"
-                AppManager.init();
-                AppManager.startup();
-            ");
+            FSequence seq = new FSequence ();
+            seq.addAction (new FWaitFor (m_luaManager.exportScript ()));
+            seq.addAction (new FCallFunc (delegate() {
+                Debug.Log ("导出完成");
+            }));
+            seq.addAction (new FCallFunc (m_luaManager.importScript));
+            seq.addAction (new FCallFunc (delegate() {
+                m_luaManager.execute (@"
+                    AppManager.init();
+                    AppManager.startup();
+                ");
+            }));
+            this.runAction (seq);
 #if false
             var canvas = LuaHelper.getCanvas ();
             FSequence seq = new FSequence ();

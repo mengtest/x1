@@ -3,7 +3,7 @@
 namespace x1.Framework
 {
     [XLua.LuaCallCSharp]
-    public class FAction
+    public class FAction : IAsync
     {
         private System.Object m_target;
 
