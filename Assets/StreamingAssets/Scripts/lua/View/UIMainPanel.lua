@@ -1,6 +1,4 @@
 
-require 'Ctrl/UIMainPanelCtrl.lua'
-
 UIMainPanel = {};
 
 local transform = nil;
