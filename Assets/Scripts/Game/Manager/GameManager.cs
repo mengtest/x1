@@ -67,36 +67,19 @@ namespace x1.Game
 
         public void startGame ()
         {
-
-            // TODO: 这里应该先进行判断,因为有可能外部lua文件版本比安装包中的版本新
             FSequence seq = new FSequence ();
-            seq.addAction (new FWaitFor (m_luaManager.exportScript ()));
-            seq.addAction (new FCallFunc (delegate() {
-                Debug.Log ("scripts导出完成");
-            }));
+            seq.addAction (new FCallFunc (m_luaManager.exportScript));
+            seq.addAction (new FCallFunc<string> (Debug.Log, "scripts导出完成"));
             seq.addAction (new FCallFunc (m_luaManager.loadAllScript));
-            seq.addAction (new FCallFunc (delegate() {
-                Debug.Log ("scripts加载完成");
-            }));
-            seq.addAction (new FCallFunc (delegate() {
-                m_luaManager.execute (@"
+            seq.addAction (new FCallFunc<string> (Debug.Log, "scripts加载完成"));
+            seq.addAction (new FCallFunc<string> (m_luaManager.execute,
+                @"
                     AppManager.init();
                     AppManager.startup();
-                ");
-            }));
+                "
+            ));
+            seq.addAction (new FCallFunc<string> (Debug.Log, "启动完成"));
             this.runAction (seq);
-#if false
-            var canvas = LuaHelper.getCanvas ();
-            FSequence seq = new FSequence ();
-            seq.addAction (new FLoadAsset (FResID.PREFAB, "GUI/UILoading"));
-            seq.addAction (new FLoadAsset (FResID.SPRITE, "Texture/item_04_043"));
-            seq.addAction (new GGenImageCommand (canvas.transform));
-            seq.addAction (new FDelayTime (3.0f));
-            seq.addAction (new GGenGameObjectCommand (canvas.transform));
-            seq.addAction (new FUnloadAsset (FResID.SPRITE));
-            seq.addAction (new FUnloadAsset (FResID.PREFAB));
-            m_actionManager.runAction (seq);
-#endif
         }
     }
 }

@@ -30,11 +30,6 @@ namespace x1.Framework
             m_luaEnv.AddLoader (loadScript);
         }
 
-        public void execute (string luaCode)
-        {
-            m_luaEnv.DoString (luaCode);
-        }
-
         public LuaEnv getEnv ()
         {
             return m_luaEnv;
@@ -51,10 +46,8 @@ namespace x1.Framework
         /// <summary>
         /// 将内部脚本导出到外部存储
         /// </summary>
-        public FAction exportScript ()
+        public void exportScript ()
         {
-            FSequence seq = new FSequence ();
-
             if (FConst.F_IS_EXPORT_SCRIPTS) {
                 string fromPath = FConst.F_INTERNAL_SCRIPT_ROOT;
                 string toPath = FConst.F_EXTERNAL_SCRIPT_ROOT;
@@ -64,42 +57,10 @@ namespace x1.Framework
                     if (string.IsNullOrEmpty (filename))
                         continue;
 
-                    seq.addAction (exportScript (fromPath + "/" + filename, toPath + "/" + filename));
+                    File.WriteAllBytes (toPath + "/" + filename, Util.readBytesFromInternal (fromPath + "/" + filename));
                 }
-                seq.addAction (exportScript (FConst.F_INTERNAL_SCRIPT_LIST_PATH, FConst.F_EXTERNAL_SCRIPT_LIST_PATH));
+                File.WriteAllBytes (FConst.F_EXTERNAL_SCRIPT_LIST_PATH, Util.readBytesFromInternal (FConst.F_INTERNAL_SCRIPT_LIST_PATH));
             }            
-            this.runAction (seq);
-            return seq;
-        }
-
-        /// <summary>
-        /// 导出脚本文件
-        /// </summary>
-        /// <returns>The script.</returns>
-        /// <param name="fromPath">From path.</param>
-        /// <param name="toPath">To path.</param>
-        private FAction exportScript (string fromPath, string toPath)
-        {
-            FSequence seq = new FSequence ();
-#if UNITY_EDITOR
-            string url = "file:///" + fromPath;
-#else
-            string url = fromPath;
-#endif
-            var http = new FHttpRequest (url);
-            var call = new FCallFunc (delegate() {
-                WWW req = FNetworkManager.getInstance ().getRequest (url);
-                string dir = Path.GetDirectoryName (toPath);
-                if (Directory.Exists (dir) == false)
-                    Directory.CreateDirectory (dir);
-
-                File.WriteAllBytes (toPath, req.bytes);
-                Debug.Log (string.Format ("导出script : @ {0} @", toPath));
-                FNetworkManager.getInstance ().cleanRequest (url);
-            });
-            seq.addAction (http);
-            seq.addAction (call);
-            return seq;
         }
 
         /// <summary>
@@ -116,6 +77,15 @@ namespace x1.Framework
                 luacode += string.Format ("require('{0}');", scriptName);
             }
             execute (luacode); // 直接加载所有lua代码
+        }
+
+        public void loadScript (string script)
+        {
+        }
+
+        public void execute (string luaCode)
+        {
+            m_luaEnv.DoString (luaCode);
         }
 
         /// <summary>
