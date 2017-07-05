@@ -32,7 +32,7 @@ namespace x1.Framework
             float deltaTime = UnityEngine.Time.deltaTime;
 
             m_actionList.ForEach (delegate(FAction action) { // List<T>.ForEach 支持遍历过程中删除元素
-                if (action.isDone ()) {
+                if (action.isDone () || action.getTarget () == null) {
                     action.stop ();
                     m_actionList.Remove (action); // 删除元素
                 } else {

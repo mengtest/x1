@@ -43,23 +43,18 @@ namespace x1.Framework
         public override void step (float deltaTime)
         {
             if (m_currentAction == null) {
-                int idx = m_currentIndex + 1;
-
-                if (idx < m_actionList.Count) {
-                    m_currentAction = m_actionList [idx];
+                if (getNextAction ()) {
                     m_currentAction.start (getTarget ());
-
-                    m_currentIndex = idx;
+                    m_currentAction.step (deltaTime);
                 } else {
                     stop ();
                 }
             } else {
+                m_currentAction.step (deltaTime);
 
                 if (m_currentAction.isDone ()) {
                     m_currentAction.stop ();
                     m_currentAction = null;
-                } else {
-                    m_currentAction.step (deltaTime);
                 }
             }
         }
@@ -67,6 +62,18 @@ namespace x1.Framework
         public override bool isDone ()
         {
             return m_isDone;
+        }
+
+        private bool getNextAction ()
+        {
+            int idx = m_currentIndex + 1;
+
+            if (idx < m_actionList.Count) {
+                m_currentAction = m_actionList [idx];
+                m_currentIndex = idx;
+                return true;
+            }
+            return false;
         }
     }
 }

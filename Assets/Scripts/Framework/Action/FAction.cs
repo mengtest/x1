@@ -20,6 +20,7 @@ namespace x1.Framework
         /// </summary>
         public virtual void stop ()
         {
+            setTarget (null);
         }
 
         /// <summary>

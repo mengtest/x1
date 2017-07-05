@@ -3,14 +3,15 @@ using System.Collections;
 
 namespace x1.Framework
 {
-    public class FMoveTo : FTransformAction
+    public class FMoveBy : FTransformAction
     {
         private Vector3 m_fromPos;
         private Vector3 m_deltaPos;
+        private Vector3 m_targetPos;
 
-        public FMoveTo (float duration, Vector3 targetPos)
+        public FMoveBy (float duration, Vector3 deltaPos)
         {
-            m_deltaPos = targetPos;
+            m_deltaPos = deltaPos;
             setDuration (duration);
         }
 
@@ -19,8 +20,10 @@ namespace x1.Framework
             base.start (obj);
 
             Transform transform = getTransform ();
-            if (transform)
+            if (transform) {
                 m_fromPos = transform.localPosition;
+                m_targetPos = m_fromPos + m_deltaPos;
+            }
         }
 
         public override void update (float percent)
@@ -29,7 +32,7 @@ namespace x1.Framework
 
             Transform transform = getTransform ();
             if (transform)
-                transform.localPosition = Vector3.Lerp (m_fromPos, m_deltaPos, percent);
+                transform.localPosition = Vector3.Lerp (m_fromPos, m_targetPos, percent);
         }
     }
 }

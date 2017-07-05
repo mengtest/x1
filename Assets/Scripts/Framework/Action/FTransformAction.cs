@@ -16,6 +16,7 @@ namespace x1.Framework
             } else if ((obj as UnityEngine.Component) != null) { // obj被销毁后 (obj is UnityEngine.Component) 会返回true,所以这里用 as
                 setTransform ((obj as UnityEngine.Component).transform);
             } else {
+                setTransform (null);
 //                Debug.LogError ("无法从未知类型中获取Transform对象");
             }
         }

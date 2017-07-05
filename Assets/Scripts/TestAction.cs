@@ -23,11 +23,17 @@ public class TestAction : MonoBehaviour
         seq.addAction (spawn1);
         seq.addAction (spawn2);
 #endif
-#if true
+#if false
         seq.addAction (new FScaleTo (1f, Vector3.one * 5));
         seq.addAction (new FScaleTo (1f, Vector3.zero));
 #endif
-        m_target.runAction (new FRepeatForever (seq));
+#if false
+        seq.addAction (new FMoveBy (1f, Vector3.right * 10));
+#endif
+#if true
+        seq.addAction (new FRotateBy (1f, new Vector3 (0, 0, 270)));
+#endif
+        m_target.runAction (new FRepeatForever (new FRotateBy (0.4f, new Vector3 (0, 0, 90))));
     }
     
     // Update is called once per frame
