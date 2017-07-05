@@ -49,30 +49,35 @@ namespace x1.Framework
         }
 
         /// <summary>
-        /// 将内部脚本导出外部存储
+        /// 将内部脚本导出到外部存储
         /// </summary>
         public FAction exportScript ()
         {
-            string fromPath = FConst.F_INTERNAL_SCRIPT_ROOT;
-            string toPath = FConst.F_EXTERNAL_SCRIPT_ROOT;
-
             FSequence seq = new FSequence ();
-#if UNITY_EDITOR
-            string[] files = Util.readTextByWWW ("file:///" + FConst.F_INTERNAL_SCRIPT_LIST_PATH).Split ('\n');
-#else
-            string[] files = Util.readTextByWWW (FConst.F_INTERNAL_SCRIPT_LIST_PATH).Split ('\n');
-#endif
-            foreach (var filename in files) {
-                if (string.IsNullOrEmpty (filename))
-                    continue;
 
-                seq.addAction (exportScript (fromPath + "/" + filename, toPath + "/" + filename));
-            }
-            seq.addAction (exportScript (FConst.F_INTERNAL_SCRIPT_LIST_PATH, FConst.F_EXTERNAL_SCRIPT_LIST_PATH));
+            if (FConst.F_IS_EXPORT_SCRIPTS) {
+                string fromPath = FConst.F_INTERNAL_SCRIPT_ROOT;
+                string toPath = FConst.F_EXTERNAL_SCRIPT_ROOT;
+
+                string[] files = Util.readTextFromInternal (FConst.F_INTERNAL_SCRIPT_LIST_PATH).Split ('\n');
+                foreach (var filename in files) {
+                    if (string.IsNullOrEmpty (filename))
+                        continue;
+
+                    seq.addAction (exportScript (fromPath + "/" + filename, toPath + "/" + filename));
+                }
+                seq.addAction (exportScript (FConst.F_INTERNAL_SCRIPT_LIST_PATH, FConst.F_EXTERNAL_SCRIPT_LIST_PATH));
+            }            
             this.runAction (seq);
             return seq;
         }
 
+        /// <summary>
+        /// 导出脚本文件
+        /// </summary>
+        /// <returns>The script.</returns>
+        /// <param name="fromPath">From path.</param>
+        /// <param name="toPath">To path.</param>
         private FAction exportScript (string fromPath, string toPath)
         {
             FSequence seq = new FSequence ();
@@ -97,9 +102,12 @@ namespace x1.Framework
             return seq;
         }
 
-        public void importScript ()
+        /// <summary>
+        /// 加载所有lua文件
+        /// </summary>
+        public void loadAllScript ()
         {
-            string[] scriptList = Util.readTextByWWW ("file:///" + FConst.F_EXTERNAL_SCRIPT_LIST_PATH).Split ('\n');
+            string[] scriptList = Util.readTextFromExternal (FConst.F_EXTERNAL_SCRIPT_LIST_PATH).Split ('\n');
             string luacode = "";
             foreach (var scriptName in scriptList) {
                 if (string.IsNullOrEmpty (scriptName))
@@ -110,15 +118,20 @@ namespace x1.Framework
             execute (luacode); // 直接加载所有lua代码
         }
 
+        /// <summary>
+        /// 加载单个lua文件,此函数为xLua的回调函数
+        /// </summary>
+        /// <returns>The script.</returns>
+        /// <param name="filepath">Filepath.</param>
         private byte[] loadScript (ref string filepath)
         {
-#if UNITY_EDITOR
-            string path = FConst.F_INTERNAL_SCRIPT_ROOT + "/" + filepath;
-#else
-            string path = FConst.F_EXTERNAL_SCRIPT_ROOT + "/" + filepath;
-#endif
-            Debug.Log (string.Format ("加载script : @ {0} @", path));
-            return Util.readBytesByWWW ("file:///" + path);
+            if (FConst.F_IS_EXTERNAL_SCRIPTS) {
+                Debug.Log (string.Format ("加载script : @ {0} @", FConst.F_EXTERNAL_SCRIPT_ROOT + "/" + filepath));
+                return Util.readBytesFromExternal (FConst.F_EXTERNAL_SCRIPT_ROOT + "/" + filepath);
+            } else {
+                Debug.Log (string.Format ("加载script : @ {0} @", FConst.F_INTERNAL_SCRIPT_ROOT + "/" + filepath));
+                return Util.readBytesFromInternal (FConst.F_INTERNAL_SCRIPT_ROOT + "/" + filepath);
+            }
         }
     }
 }

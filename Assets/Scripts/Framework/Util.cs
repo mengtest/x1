@@ -7,22 +7,6 @@ namespace x1.Framework
 {
     public static class Util
     {
-        public static UnityEngine.Object loadGameObject (string path)
-        {
-            return Resources.Load (path);
-        }
-
-        public static UnityEngine.GameObject createGameObject (GameObject prefab, Transform parent)
-        {
-            GameObject go = GameObject.Instantiate (prefab) as GameObject;
-            go.name = prefab.name;
-            go.transform.SetParent (parent);
-            go.transform.localPosition = Vector3.zero;
-            go.transform.localScale = Vector3.one;
-            go.transform.eulerAngles = Vector3.zero;
-            return go;
-        }
-
         public static System.Type getType (string classname)
         {
             System.Type t = null;
@@ -45,25 +29,36 @@ namespace x1.Framework
 
         }
 
-        public static string readText (string path)
+        /// <summary>
+        /// 读取外部文件
+        /// </summary>
+        /// <returns>The external file.</returns>
+        public static byte[] readBytesFromExternal (string path)
         {
-            return System.IO.File.ReadAllText (path);
+            return System.IO.File.ReadAllBytes (path);
         }
 
-        public static string readTextByWWW (string path)
+        /// <summary>
+        /// 读取外部文件
+        /// </summary>
+        /// <returns>The text from external.</returns>
+        /// <param name="path">Path.</param>
+        public static string readTextFromExternal (string path)
         {
-            using (WWW w = new WWW (path)) {
-                while (w.isDone == false)
-                    ; // 这样简单粗暴
-                if (string.IsNullOrEmpty (w.error) == false)
-                    Debug.LogError (w.error);
-                return w.text;
-            }
-            return null;
+            byte[] bytes = readBytesFromExternal (path);
+            string text = System.Text.Encoding.ASCII.GetString (bytes);
+            return text;
         }
 
-        public static byte[] readBytesByWWW (string path)
+        /// <summary>
+        /// 读取安装包内部文件
+        /// </summary>
+        /// <returns>The internal file.</returns>
+        public static byte[] readBytesFromInternal (string path)
         {
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN
+            return readBytesFromExternal (path); // 编辑器下所有文件都是外部文件
+#else
             using (WWW w = new WWW (path)) {
                 while (w.isDone == false)
                     ; // 这样简单粗暴
@@ -71,7 +66,19 @@ namespace x1.Framework
                     Debug.LogError (w.error);
                 return w.bytes;
             }
-            return null;
+#endif
+        }
+
+        /// <summary>
+        /// 读取安装包内部文件
+        /// </summary>
+        /// <returns>The text from internal.</returns>
+        /// <param name="path">Path.</param>
+        public static string readTextFromInternal (string path)
+        {
+            byte[] bytes = readBytesFromInternal (path);
+            string text = System.Text.Encoding.ASCII.GetString (bytes);
+            return text;
         }
     }
 }

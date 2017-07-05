@@ -74,7 +74,7 @@ namespace x1.Game
             seq.addAction (new FCallFunc (delegate() {
                 Debug.Log ("scripts导出完成");
             }));
-            seq.addAction (new FCallFunc (m_luaManager.importScript));
+            seq.addAction (new FCallFunc (m_luaManager.loadAllScript));
             seq.addAction (new FCallFunc (delegate() {
                 Debug.Log ("scripts加载完成");
             }));
