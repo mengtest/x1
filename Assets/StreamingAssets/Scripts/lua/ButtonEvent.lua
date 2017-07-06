@@ -9,14 +9,19 @@ function ButtonEvent.onClick(gameObj, uiName)
         local funcName = btnName .. '_onClick';
         local ctrl = _G[ctrlName];
         local callback = ctrl[funcName];
-        log(ctrlName .. '.' .. funcName);
-        callback();
+        -- log(ctrlName .. '.' .. funcName);
+        if (callback ~= nil) then
+            callback();
+        end
     else
         local funcName = func .. '_onClick';
         local ctrl = _G[ctrlName];
         local callback = ctrl[funcName];
-        log(ctrlName .. '.' .. funcName);
-        callback(idx);
+        -- log(ctrlName .. '.' .. funcName);
+
+        if (callback ~= nil) then
+            callback(tonumber(idx));
+        end
     end
 end
 
