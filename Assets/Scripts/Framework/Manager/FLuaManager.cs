@@ -58,6 +58,7 @@ namespace x1.Framework
                         continue;
 
                     File.WriteAllBytes (toPath + "/" + filename, Util.readBytesFromInternal (fromPath + "/" + filename));
+                    Debug.Log ("导出script : " + toPath + "/" + filename);
                 }
                 File.WriteAllBytes (FConst.F_EXTERNAL_SCRIPT_LIST_PATH, Util.readBytesFromInternal (FConst.F_INTERNAL_SCRIPT_LIST_PATH));
             }            
