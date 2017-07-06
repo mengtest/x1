@@ -9,7 +9,7 @@ namespace x1.Framework
 
     [CSharpCallLua]
     [RequireComponent (typeof (Button))]
-    public class FUIButtonEvent : MonoBehaviour
+    public class FLuaButtonEvent : MonoBehaviour
     {
         private Button m_button;
 
@@ -19,7 +19,6 @@ namespace x1.Framework
 
         private LuaTable m_buttonEvent;
 
-        [CSharpCallLua]
         private System.Action<System.Object, System.Object> m_luaFunc;
 
         void Awake ()

@@ -80,6 +80,21 @@ namespace x1.Framework
             string text = System.Text.Encoding.ASCII.GetString (bytes);
             return text;
         }
+
+        /// <summary>
+        /// 删除后缀名
+        /// </summary>
+        /// <returns>The extension.</returns>
+        /// <param name="path">Path.</param>
+        public static string removeExtension (string path)
+        {
+            string filename = path;
+            int minPos = path.LastIndexOf ('/');
+            int maxPos = path.LastIndexOf ('.');
+            if (maxPos > minPos)
+                filename = path.Remove (maxPos);
+            return filename;
+        }
     }
 }
 

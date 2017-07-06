@@ -61,9 +61,9 @@ namespace x1.Framework
 
             var btns = transform.GetComponentsInChildren<Button> (true);
             foreach (var btn in btns) {
-                FUIButtonEvent buttnEvent = btn.GetComponent<FUIButtonEvent> ();
+                FLuaButtonEvent buttnEvent = btn.GetComponent<FLuaButtonEvent> ();
                 if (buttnEvent == null)
-                    buttnEvent = btn.gameObject.AddComponent<FUIButtonEvent> ();
+                    buttnEvent = btn.gameObject.AddComponent<FLuaButtonEvent> ();
             }
 
             if (m_luaInit != null)
