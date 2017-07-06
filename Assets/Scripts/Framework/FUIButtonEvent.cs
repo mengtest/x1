@@ -27,7 +27,7 @@ namespace x1.Framework
             m_pivot = gameObject.GetComponentInParent<FLuaBehaviour> ();
             m_button = gameObject.GetComponent<Button> ();
             m_luaEnv = FLuaManager.getInstance ().getEnv ();
-            m_buttonEvent = m_luaEnv.Global.GetInPath<LuaTable> ("ButtonEvent");
+            m_buttonEvent = m_luaEnv.Global.Get<LuaTable> ("ButtonEvent");
 
             m_luaFunc = m_buttonEvent.Get<System.Action<System.Object, System.Object>> ("onClick");
             m_button.onClick.AddListener (onClick);

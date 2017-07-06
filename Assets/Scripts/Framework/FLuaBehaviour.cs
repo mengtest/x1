@@ -32,8 +32,8 @@ namespace x1.Framework
             m_luaManager = FLuaManager.getInstance ();
             LuaEnv luaEnv = m_luaManager.getEnv ();
 
-            LuaTable viewScript = luaEnv.Global.GetInPath<LuaTable> (m_className);
-            LuaTable ctrlScript = luaEnv.Global.GetInPath<LuaTable> (m_className + "Ctrl");
+            LuaTable viewScript = luaEnv.Global.Get<LuaTable> (m_className);
+            LuaTable ctrlScript = luaEnv.Global.Get<LuaTable> (m_className + "Ctrl");
 
             if (viewScript == null) {
                 Debug.Log ("not found " + m_className + " with in lua scripts");

@@ -1,10 +1,6 @@
 
 UIHeroSelectPanelCtrl = {};
 
-function UIHeroSelectPanelCtrl.hero_1_onClick()
-    log('hero_1');
-end
-
 function UIHeroSelectPanelCtrl.hero_onClick(idx)
     log(idx);
 end
