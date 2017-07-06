@@ -22,6 +22,7 @@ namespace x1.Framework
                     }
                 }
             }
+            Debug.Log ("导出路径：" + FConst.F_INTERNAL_SCRIPT_LIST_PATH);
             AssetDatabase.Refresh ();
         }
     }

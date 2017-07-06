@@ -4,9 +4,11 @@ ButtonEvent.lua
 Common.lua
 GUIManager.lua
 Ctrl/UIDialogCtrl.lua
+Ctrl/UIHeroSelectPanelCtrl.lua
 Ctrl/UILoadBattlePanelCtrl.lua
 Ctrl/UILoadingCtrl.lua
 Ctrl/UIMainPanelCtrl.lua
+View/UIHeroSelectPanel.lua
 View/UILoadBattlePanel.lua
 View/UILoading.lua
 View/UIMainPanel.lua

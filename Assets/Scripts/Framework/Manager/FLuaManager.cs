@@ -68,7 +68,12 @@ namespace x1.Framework
         /// </summary>
         public void loadAllScript ()
         {
-            string[] scriptList = Util.readTextFromExternal (FConst.F_EXTERNAL_SCRIPT_LIST_PATH).Split ('\n');
+            string[] scriptList = null;
+            if (FConst.F_IS_EXTERNAL_SCRIPTS)
+                scriptList = Util.readTextFromExternal (FConst.F_EXTERNAL_SCRIPT_LIST_PATH).Split ('\n');
+            else
+                scriptList = Util.readTextFromInternal (FConst.F_INTERNAL_SCRIPT_LIST_PATH).Split ('\n');
+            
             string luacode = "";
             foreach (var scriptName in scriptList) {
                 if (string.IsNullOrEmpty (scriptName))

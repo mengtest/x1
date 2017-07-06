@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
@@ -34,6 +35,15 @@ namespace x1.Framework
             LuaTable viewScript = luaEnv.Global.GetInPath<LuaTable> (m_className);
             LuaTable ctrlScript = luaEnv.Global.GetInPath<LuaTable> (m_className + "Ctrl");
 
+            if (viewScript == null) {
+                Debug.Log ("not found " + m_className + " with in lua scripts");
+                return;
+            }
+            if (ctrlScript == null) {
+                Debug.Log ("not found " + m_className + "Ctrl with in lua scripts");
+                return;
+            }
+
             viewScript.Set ("gameObject", gameObject);
             viewScript.Set ("transform", transform);
 
@@ -51,9 +61,9 @@ namespace x1.Framework
 
             var btns = transform.GetComponentsInChildren<Button> (true);
             foreach (var btn in btns) {
-                UnityAction onClick = ctrlScript.Get<UnityAction> (btn.name + "_onClick");
-                if (onClick != null)
-                    btn.onClick.AddListener (onClick);
+                FUIButtonEvent buttnEvent = btn.GetComponent<FUIButtonEvent> ();
+                if (buttnEvent == null)
+                    buttnEvent = btn.gameObject.AddComponent<FUIButtonEvent> ();
             }
 
             if (m_luaInit != null)
