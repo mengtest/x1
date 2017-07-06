@@ -27,7 +27,7 @@ namespace x1.Framework
         public void init ()
         {
             m_luaEnv = new LuaEnv ();
-            m_luaEnv.AddLoader (loadScript);
+            m_luaEnv.AddLoader (__loadScript);
         }
 
         public LuaEnv getEnv ()
@@ -57,8 +57,11 @@ namespace x1.Framework
                     if (string.IsNullOrEmpty (filename))
                         continue;
 
-                    File.WriteAllBytes (toPath + "/" + filename, Util.readBytesFromInternal (fromPath + "/" + filename));
-                    Debug.Log ("导出script : " + toPath + "/" + filename);
+                    string internalPath = fromPath + "/" + filename;
+                    string externalPath = toPath + "/" + filename;
+
+                    File.WriteAllBytes (externalPath, Util.readBytesFromInternal (internalPath));
+                    Debug.Log (string.Format ("导出script : @ {0} @", externalPath));
                 }
                 File.WriteAllBytes (FConst.F_EXTERNAL_SCRIPT_LIST_PATH, Util.readBytesFromInternal (FConst.F_INTERNAL_SCRIPT_LIST_PATH));
             }            
@@ -75,18 +78,21 @@ namespace x1.Framework
             else
                 scriptList = Util.readTextFromInternal (FConst.F_INTERNAL_SCRIPT_LIST_PATH).Split ('\n');
             
-            string luacode = "";
             foreach (var scriptName in scriptList) {
                 if (string.IsNullOrEmpty (scriptName))
                     continue;
                 
-                luacode += string.Format ("require('{0}');", scriptName);
+                loadScript (scriptName); // 直接加载所有lua代码
             }
-            execute (luacode); // 直接加载所有lua代码
         }
 
+        /// <summary>
+        /// 加载单个lua
+        /// </summary>
+        /// <param name="script">Script.</param>
         public void loadScript (string script)
         {
+            execute (string.Format ("require ('{0}');", script));
         }
 
         public void execute (string luaCode)
@@ -99,7 +105,7 @@ namespace x1.Framework
         /// </summary>
         /// <returns>The script.</returns>
         /// <param name="filepath">Filepath.</param>
-        private byte[] loadScript (ref string filepath)
+        private byte[] __loadScript (ref string filepath)
         {
             if (FConst.F_IS_EXTERNAL_SCRIPTS) {
                 Debug.Log (string.Format ("加载script : @ {0} @", FConst.F_EXTERNAL_SCRIPT_ROOT + "/" + filepath));
