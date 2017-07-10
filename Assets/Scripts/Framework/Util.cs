@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,7 +27,12 @@ namespace x1.Framework
                 Debug.LogError (ex);
             }
             return t;
+        }
 
+        public static double getTimestamp ()
+        {
+            TimeSpan ts = DateTime.UtcNow - new DateTime (1970, 1, 1, 0, 0, 0, 0);
+            return ts.TotalSeconds;
         }
 
         /// <summary>
@@ -94,6 +100,19 @@ namespace x1.Framework
             if (maxPos > minPos)
                 filename = path.Remove (maxPos);
             return filename;
+        }
+
+        public static void copyDierctory (string source, string dest)
+        {
+            string[] files = Directory.GetFiles (source, "*", SearchOption.AllDirectories);
+
+            for (int i = 0; i < files.Length; i++) {
+                string str = files [i].Remove (0, source.Length);
+                string path = dest + "/" + str;
+                string dir = Path.GetDirectoryName (path);
+                Directory.CreateDirectory (dir);
+                File.Copy (files [i], path, true);
+            }
         }
     }
 }
