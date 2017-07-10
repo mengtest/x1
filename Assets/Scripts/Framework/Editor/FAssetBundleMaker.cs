@@ -90,13 +90,9 @@ namespace x1.Framework
             BuildTarget buildTarget = m_targetDict [m_selectedTarget];
             List<AssetBundleBuild> builds = new List<AssetBundleBuild> ();
 
-#if false
             // 添加要打包到AssetBundle的所有文件
             builds.AddRange (getBuildList (Application.dataPath + "/Resources/"));
-            builds.AddRange (getBuildList (Application.streamingAssetsPath + "/"));
-#else
-            builds.AddRange (getBuildList (Application.dataPath + "/Resources/GUI/"));
-#endif
+
             if (Directory.Exists (oldVersionRoot))
                 Util.copyDierctory (oldVersionRoot, newVersionRoot); // 直接移动到新版本的目录,这样就不会重新生成所有的AssetBundle
             else
@@ -116,23 +112,23 @@ namespace x1.Framework
         /// <param name="newVer">新版本.</param>
         private void genVersionPatch ()
         {
-            string oldPath = m_absolutePath + "/" + m_oldVersion + "/" + m_selectedTarget + "/" + m_selectedTarget;
-            string newPath = m_absolutePath + "/" + m_newVersion + "/" + m_selectedTarget + "/" + m_selectedTarget;
+            string oldManifestPath = m_absolutePath + "/" + m_oldVersion + "/" + m_selectedTarget + "/" + m_selectedTarget;
+            string newManifestPath = m_absolutePath + "/" + m_newVersion + "/" + m_selectedTarget + "/" + m_selectedTarget;
             string[] oldBundleList = new string[0];
             string[] newBundleList = new string[0];
             AssetBundleManifest oldManifest = null;
             AssetBundleManifest newManifest = null;
 
-            if (File.Exists (oldPath)) {
-                AssetBundle oldBundle = AssetBundle.LoadFromFile (oldPath);
+            if (File.Exists (oldManifestPath)) {
+                AssetBundle oldBundle = AssetBundle.LoadFromFile (oldManifestPath);
                 oldManifest = oldBundle.LoadAsset<AssetBundleManifest> ("AssetBundleManifest");
                 oldBundle.Unload (false); // 同时加载两个MainBundle会报错,所以需要先unload
 
                 oldBundleList = oldManifest.GetAllAssetBundles ();
             }
 
-            if (File.Exists (newPath)) {
-                AssetBundle newBundle = AssetBundle.LoadFromFile (newPath);
+            if (File.Exists (newManifestPath)) {
+                AssetBundle newBundle = AssetBundle.LoadFromFile (newManifestPath);
                 newManifest = newBundle.LoadAsset<AssetBundleManifest> ("AssetBundleManifest");
                 newBundle.Unload (false); // 同时加载两个MainBundle会报错,所以需要先unload
                 newBundleList = newManifest.GetAllAssetBundles ();
@@ -149,7 +145,7 @@ namespace x1.Framework
                 }
             }
 
-            patchFiles.Add (newPath);
+            patchFiles.Add (newManifestPath); // manifest必须更新
 
             string zipPath = m_absolutePath + "/" + m_selectedTarget + "_patch_" + m_oldVersion + "_" + m_newVersion + ".zip";
             string fileRoot = m_absolutePath + "/" + m_newVersion + "/" + m_selectedTarget;
@@ -173,12 +169,13 @@ namespace x1.Framework
                 if (filename.EndsWith (".meta"))
                     continue;
 
-                string assetName = filename.Remove (0, prefixLen);
-                string bundleName = Util.removeExtension (assetName);
+                string assetPath = filename.Remove (0, prefixLen);
+                string assetName = Util.removeExtension (assetPath);
+                string bundleName = assetName;
 
                 AssetBundleBuild abb = new AssetBundleBuild ();
                 abb.assetBundleName = bundleName;
-                abb.assetNames = new string[]{ assetName };
+                abb.assetNames = new string[]{ assetPath };
                 builds.Add (abb);
             }
 
